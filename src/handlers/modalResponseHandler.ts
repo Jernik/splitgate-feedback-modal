@@ -62,7 +62,7 @@ async function handleBugReportModalSubmission(interaction: ModalSubmitInteractio
   let username = interaction.fields.getTextInputValue('usernameInput');
   let description = interaction.fields.getTextInputValue('descriptionInput');
   let proof = interaction.fields.getTextInputValue('proofInput');
-  appendToGoogleSheet(
+  await appendToGoogleSheet(
 		[
 			[
 				member!?.user.tag ?? "Not Found",
@@ -91,7 +91,7 @@ async function handleFeedbackModalSubmission(interaction:ModalSubmitInteraction)
   let email = interaction.fields.getTextInputValue('emailInput');
   let feedback = interaction.fields.getTextInputValue('feedbackInput');
   let link = interaction.fields.getTextInputValue('linkInput');
-  appendToGoogleSheet(
+  await appendToGoogleSheet(
 		[
 			[
 				member!?.user.tag ?? "Not Found",
