@@ -9,7 +9,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import { buttonHandler } from "./handlers/buttonHandler";
-//import { modalResponseHandler } from "./handlers/modalResponseHandler";
+import { modalResponseHandler } from "./handlers/modalResponseHandler";
 import { config } from "./config";
 import { safeLogCreator } from  "./functions/logging";
 
@@ -51,7 +51,7 @@ client.on(
 			// });
 		}else if (interaction.isModalSubmit()) {
 			//dispatch to modal handler
-			//await modalResponseHandler(interaction);
+			await modalResponseHandler(interaction);
 		}
 	}
 );
@@ -60,6 +60,3 @@ client.on(
 // Login to Discord with your client's token
 client.login(token);
 
-client.on("messageCreate", async (message: Message) => {
-	// await MessageHandler(client)(message);
-});

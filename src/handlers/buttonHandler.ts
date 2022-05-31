@@ -36,7 +36,7 @@ async function showBugReportModal(interaction: MessageComponentInteraction) {
 	}
 	if (user!) {
 		// Create the modal
-		const modal = new Modal().setCustomId("myModal").setTitle("My Modal");
+		const modal = new Modal().setCustomId("bugReportModal").setTitle("Bug Report");
 		// Add components to modal
 		// Create the text input components
 		const inputs = [];
@@ -102,7 +102,7 @@ async function showInGameFeedbackModal(
 	}
 	if (user!) {
 		// Create the modal
-		const modal = new Modal().setCustomId("myModal").setTitle("My Modal");
+		const modal = new Modal().setCustomId("feedbackModal").setTitle("Feedback");
 		// Add components to modal
 		// Create the text input components
 		const inputs = [];
