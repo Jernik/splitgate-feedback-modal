@@ -1,4 +1,4 @@
-import { CacheType, MessageComponentInteraction, ModalSubmitInteraction } from "discord.js";
+import { CacheType, GuildMember, MessageComponentInteraction, ModalSubmitInteraction } from "discord.js";
 import {google} from "googleapis";
 import { getGoogleSheetsOAuth2Client } from "../functions/getGoogleSheetOAuth2Client";
 
@@ -50,18 +50,58 @@ export {modalResponseHandler}
 
 async function handleBugReportModalSubmission(interaction: ModalSubmitInteraction) {
   let discordUserId = interaction.user.id;
+  let member: GuildMember;
+	if (interaction.member instanceof GuildMember) {
+		member = interaction.member;
+	} else {
+		const found = interaction.guild?.members?.resolve(discordUserId);
+		if (found) member = found;
+	}
   let email = interaction.fields.getTextInputValue('emailInput');
   let platform = interaction.fields.getTextInputValue('platformInput');
   let username = interaction.fields.getTextInputValue('usernameInput');
   let description = interaction.fields.getTextInputValue('descriptionInput');
   let proof = interaction.fields.getTextInputValue('proofInput');
-  appendToGoogleSheet([[discordUserId, email, platform, username, description, proof]], "Bug Report");
+  appendToGoogleSheet(
+		[
+			[
+				member!?.user.tag ?? "Not Found",
+				discordUserId,
+				email,
+				platform,
+				username,
+				description,
+				proof,
+			],
+		],
+		"Bug Report"
+	);
+  interaction.reply({content:"Thank you for your bug report!", ephemeral: true});
 }
 
 async function handleFeedbackModalSubmission(interaction:ModalSubmitInteraction){
   let discordUserId = interaction.user.id;
+  let member: GuildMember;
+	if (interaction.member instanceof GuildMember) {
+		member = interaction.member;
+	} else {
+		const found = interaction.guild?.members?.resolve(discordUserId);
+		if (found) member = found;
+	}
   let email = interaction.fields.getTextInputValue('emailInput');
   let feedback = interaction.fields.getTextInputValue('feedbackInput');
   let link = interaction.fields.getTextInputValue('linkInput');
-  appendToGoogleSheet([[discordUserId, email, feedback, link]], "Feedback");
+  appendToGoogleSheet(
+		[
+			[
+				member!?.user.tag ?? "Not Found",
+				discordUserId,
+				email,
+				feedback,
+				link,
+			],
+		],
+		"Feedback"
+	);
+  interaction.reply({content:"Thank you for your feedback!", ephemeral: true});
 }
