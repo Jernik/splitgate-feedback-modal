@@ -23,6 +23,8 @@ let buttonHandler = async (
 		await showInGameFeedbackModal(interaction);
 	} else if(buttonType === "discord-feedback") {
 		await showDiscordFeedbackModal(interaction);
+	} else if(buttonType === "creator-application"){
+		await showCreatorApplicationModal(interaction);
 	}
 };
 
@@ -232,3 +234,76 @@ async function showDiscordFeedbackModal(
 
 
 export { buttonHandler };
+
+async function showCreatorApplicationModal(
+	interaction: MessageComponentInteraction
+) {
+	let user: GuildMember;
+	if (interaction.member instanceof GuildMember) {
+		user = interaction.member;
+	} else {
+		const found = interaction.guild?.members?.resolve(
+			this.interaction.user?.id
+		);
+		if (found) user = found;
+	}
+	if (user!) {
+		// Create the modal
+		const modal = new Modal()
+			.setCustomId("creatorApplicationModal")
+			.setTitle("Community Creator Application");
+		// Add components to modal
+		// Create the text input components
+		const inputs = [];
+		inputs.push(
+			new TextInputComponent()
+				.setCustomId("friendCodeInput")
+				// The label is the prompt the user sees for this input
+				.setLabel("Your Splitgate Friend Code (8 characters)")
+				.setRequired(true)
+				// Short means only a single line of text
+				.setStyle("SHORT")
+		);
+		inputs.push(
+			new TextInputComponent()
+				.setCustomId("platformInput")
+				.setLabel("What platform are you on?")
+				.setRequired(true)
+				.setPlaceholder("Steam, Playstation, Xbox")
+				.setStyle("SHORT")
+		);
+		inputs.push(
+			new TextInputComponent()
+				.setCustomId("splitgateNameInput")
+				.setLabel("What is your name in game?")
+				.setRequired(true)
+				.setStyle("SHORT")
+		);
+		inputs.push(
+			new TextInputComponent()
+				.setCustomId("channelLinkInput")
+				.setLabel("Please Link your channel")
+				.setRequired(true)
+				.setPlaceholder("Youtube, Twitch, etc")
+				.setStyle("SHORT")
+		);
+
+		// An action row only holds one text input,
+		// so you need one action row per text input.
+		const actionComponents = inputs.map((input) =>
+			new MessageActionRow<ModalActionRowComponent>().addComponents(input)
+		);
+
+		// Add inputs to the modal
+		modal.addComponents(...actionComponents);
+		// Show the modal to the user
+		await interaction.showModal(modal);
+	} else {
+		interaction.reply({
+			content: `Error processing command. (Error 1002)`,
+		});
+		console.log(
+			`unable to locate member object for id ${interaction?.user?.id}`
+		);
+	}
+}
