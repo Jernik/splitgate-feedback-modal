@@ -70,6 +70,7 @@ async function handleBugReportModalSubmission(interaction: ModalSubmitInteractio
   await appendToGoogleSheet(
 		[
 			[
+				new Date().toLocaleString(),
 				member!?.user.tag ?? "Not Found",
 				discordUserId,
 				email,
@@ -98,7 +99,16 @@ async function handleFeedbackModalSubmission(interaction:ModalSubmitInteraction)
   let feedback = interaction.fields.getTextInputValue('feedbackInput');
   let link = interaction.fields.getTextInputValue('linkInput');
   await appendToGoogleSheet(
-		[[member!?.user.tag ?? "Not Found", discordUserId, email, feedback, link]],
+		[
+			[
+				new Date().toLocaleString(),
+				member!?.user.tag ?? "Not Found",
+				discordUserId,
+				email,
+				feedback,
+				link,
+			],
+		],
 		"Feedback",
 		FEEDBACK_BUG_REPORT_SHEET_ID
 	);
@@ -120,6 +130,7 @@ async function handleCreatorApplicationModal(interaction: ModalSubmitInteraction
 		await appendToGoogleSheet(
 			[
 				[
+					new Date().toLocaleString(),
 					member!?.user.tag ?? "Not Found",
 					discordUserId,
 					friendCode,
